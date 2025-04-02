@@ -1,14 +1,10 @@
 @import 'tailwindcss';
 
 body {
-	background: white;
+	background: #efefef;
 }
 
 /* Login.css */
-
-button:active {
-	background-color: #c10f1a;
-}
 
 /* Анимация затухания */
 .fade-out {
