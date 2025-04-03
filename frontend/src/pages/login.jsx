@@ -2,19 +2,58 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 function Login() {
-	const [fullName, setFullName] = useState('') //состояние для имени в поле для ввода
-	const [groupNumber, setGroupNumber] = useState('') //состояние для номера группы
-	const [step, setStep] = useState(1) //состояние для шагов регистрации
-	const [isFocused, setIsFocused] = useState(false) //состояние для ебучего фокуса
+	const userId = localStorage.getItem('user_id')
 
-	const navigate = useNavigate() //состояние для навигации
+	const [fullName, setFullName] = useState('')
+	const [groupNumber, setGroupNumber] = useState('')
+	const [step, setStep] = useState(1)
+	const [isFocused, setIsFocused] = useState(false)
 
-	const isFullNameValid = fullName.trim().split(' ').length >= 3 //делит fullname на три части по пробелам и проверяет их количество таким образом проверяется ввел ли пользователь полное ФИО
-	const isGroupNumberValid = groupNumber.trim().length >= 11 //проверяет длину номера группы
+	const navigate = useNavigate()
 
-	const isInputEmpty = step === 1 ? !isFullNameValid : !isGroupNumberValid //я хз
+	const isFullNameValid = fullName.trim().split(' ').length >= 3
+	const isGroupNumberValid = groupNumber.trim().length >= 11
 
-	//функция перехода с одного шага регистрации на второй
+	const isInputEmpty = step === 1 ? !isFullNameValid : !isGroupNumberValid
+
+	const sendUserDataToServer = async (userId, fullName, groupNumber) => {
+		try {
+			const userData = {
+				user_id: Number(userId), // на всякий случай
+				user_fullname: fullName,
+				user_group: groupNumber,
+			}
+			console.log('Отправляем данные:', userData)
+
+			const response = await fetch('http://192.168.167.48:8000/reg_user/', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(userData),
+			})
+
+			if (!response.ok) {
+				const errorData = await response.json()
+				console.error(
+					'Ошибка при регистрации:',
+					errorData.detail || response.status
+				)
+				console.log(
+					'Отправляемые данные в fetch:',
+					JSON.stringify(userData, null, 2)
+				)
+
+				return
+			}
+
+			const data = await response.json()
+			console.log('User registered successfully:', data)
+		} catch (error) {
+			console.error('Ошибка при отправке данных на сервер:', error)
+		}
+	}
+
 	const handleNextStep = () => {
 		if (step === 1) {
 			document.getElementById('form-container').classList.add('fade-out')
@@ -24,8 +63,14 @@ function Login() {
 				document.getElementById('form-container').classList.add('fade-in')
 			}, 600)
 		} else {
-			localStorage.setItem('userFullName', fullName) // Сохраняем имя в localStorage
-			navigate('/main') //по завершению регистрации
+			// Сохраняем имя в localStorage
+			localStorage.setItem('userFullName', fullName)
+
+			// Отправляем данные на сервер
+			sendUserDataToServer(userId, fullName, groupNumber)
+
+			// Переходим на главную страницу
+			navigate('/main')
 		}
 	}
 
@@ -38,15 +83,13 @@ function Login() {
 				{step !== 1 ? (
 					<p className='text-4xl mb-15 text-center text-black z-10 relative'>
 						Привет, {fullName.split(' ')[1] || fullName}👋
-					</p> //fullName.split(' ')[1] делит fullname по пробелам и берет имя пользователя
+					</p>
 				) : (
 					<p className='text-4xl mb-15'>
 						Давайте познакомимся – как вас зовут?
 					</p>
 				)}
-				<div
-					className={`z-10 w-full max-w-sm flex flex-col items-center transition-opacity duration-300`}
-				>
+				<div className='z-10 w-full max-w-sm flex flex-col items-center transition-opacity duration-300'>
 					<label className='w-full flex flex-col text-lg mb-4'>
 						<span
 							className='text-start uppercase text-md'
@@ -66,8 +109,8 @@ function Login() {
 									: setGroupNumber(e.target.value)
 							}
 							className='text-start border-b-2 border-solid outline-none py-1 w-full transition-all'
-							onFocus={() => setIsFocused(true)} // при фокусе
-							onBlur={() => setIsFocused(false)} // при потере фокуса
+							onFocus={() => setIsFocused(true)}
+							onBlur={() => setIsFocused(false)}
 							style={{
 								borderColor: isFocused ? '#820000' : '#b0b0b0',
 							}}

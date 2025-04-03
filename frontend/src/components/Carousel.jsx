@@ -4,16 +4,16 @@ const Slider = () => {
 	const [currentIndex, setCurrentIndex] = useState(1)
 	const images = [
 		{
-			src: 'https://i.pinimg.com/736x/98/cb/8f/98cb8fa81275f968636352824020b90f.jpg',
-			caption: 'Новость смешной кот',
+			src: 'https://placehold.co/600x400',
+			caption: 'Новость 1',
 		},
 		{
-			src: 'https://i.pinimg.com/736x/b0/36/bd/b036bdb7fd1ccd463298f02295f8c8f7.jpg',
-			caption: 'Новость вайб старой игры',
+			src: 'https://placehold.co/600x400',
+			caption: 'Новость 2',
 		},
 		{
-			src: 'https://i.pinimg.com/736x/78/23/05/7823052aec0858d1c5888850d3fa7354.jpg',
-			caption: 'Новость крутая машина',
+			src: 'https://placehold.co/600x400',
+			caption: 'Новость 3',
 		},
 	]
 
@@ -43,7 +43,7 @@ const Slider = () => {
 						<div
 							className='absolute inset-0 z-10 h-full w-full '
 							style={{
-								backgroundImage: `linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0)), url(${image.src})`,
+								backgroundImage: `linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0)), url(${image.src})`,
 								backgroundSize: 'cover',
 								backgroundPosition: 'center',
 							}}
@@ -81,7 +81,7 @@ const Slider = () => {
 						className={`h-2 rounded-full cursor-pointer transition-all ${
 							currentIndex === index + 1
 								? 'bg-[#820000] w-6'
-								: 'bg-stone-300 w-2'
+								: 'bg-[#00000025] w-2'
 						}`}
 						onClick={() => setCurrentIndex(index + 1)} // Переключение на слайд по клику на точку
 					></div>

@@ -7,9 +7,13 @@ function ScheduleCard({
 }) {
 	return (
 		<div
-			className={`w-full h-40 bg-white rounded-[50px] flex flex-col gap-2 px-5 pb-6 pt-4 mb-4 transition-all shadow-lg ${
-				isActiveLesson ? 'shadow-[#C10F1A50] border-1 border-[#C10F1A]' : ''
-			}`}
+			className='w-full h-40 bg-white rounded-[50px] flex flex-col gap-2 px-5 pb-6 pt-4 mb-4 transition-all'
+			style={{
+				boxShadow: isActiveLesson
+					? '0 4px 8px rgba(193, 15, 26, 0.31)'
+					: '0 4px 8px rgba(0, 0, 0, 0.1)',
+				border: isActiveLesson ? '1px solid #C10F1A' : 'none',
+			}}
 		>
 			<p className='ml-2 text-xl h-3/5 font-semibold'>{Descipline}</p>
 			<p className='ml-2 text-md h-1/5 font-thin'>{Teacher}</p>
