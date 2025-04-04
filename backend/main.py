@@ -8,8 +8,8 @@ from passlib.context import CryptContext # библиотека для ХЕША 
 
 #импорт наших классов
 from database import engine, session_local
-from models import Base, User, GroupInfo
-from schemas import UserCreate, User as UserSchema, GroupInfoBase, GroupInfo as GroupInfoSchema 
+from models import Base, User, GroupInfo, News, Events
+from schemas import UserCreate, User as UserSchema, GroupInfoBase, GroupInfo as GroupInfoSchema, NewsCreate, News as NewsSchema, EventsCreate, Events as EventsSchema
 
 
 app = FastAPI()
@@ -74,3 +74,55 @@ async def check_user(userId: str, db: Session = Depends(get_db)):
     if user:
         return {"exists": True}
     raise HTTPException(status_code=404, detail="Пользователь не найден")
+
+# Вывод всех данных
+@app.get("/news/", response_model=List[NewsSchema])
+async def news(db: Session = Depends(get_db)):
+    return db.query(News).all()
+
+@app.get("/news/{news_id}")
+async def check_news(news_id: str, db: Session = Depends(get_db)):
+    news = db.query(News).filter(News.id == news_id).first()
+    if news:
+        return news
+    raise HTTPException(status_code=404, detail="такой новости нет")
+
+# Вывод всех данных
+@app.get("/events/", response_model=List[EventsSchema])
+async def events(db: Session = Depends(get_db)):
+    return db.query(Events).all()
+
+@app.get("/events/{event_id}")
+async def check_event(event_id: str, db: Session = Depends(get_db)):
+    event = db.query(Events).filter(Events.id == event_id).first()
+    if event:
+        return event
+    raise HTTPException(status_code=404, detail="такого мероприятия нет")
+
+@app.post("/news/", response_model=NewsSchema)  
+async def create_news(news: NewsCreate, db: Session = Depends(get_db)) -> NewsSchema:
+    db_news = News(
+        title=news.title,
+        description=news.description,
+        image_path=news.image_path,
+        date=news.date,
+    )
+    db.add(db_news)
+    db.commit()
+    db.refresh(db_news)
+
+    return db_news 
+
+@app.post("/event/", response_model=EventsSchema)  
+async def event_news(event: EventsCreate, db: Session = Depends(get_db)) -> EventsSchema:
+    db_event = Events(
+        title=event.title,
+        description=event.description,
+        image_path=event.image_path,
+        date=event.date,
+    )
+    db.add(db_event)
+    db.commit()
+    db.refresh(db_event)
+
+    return db_event

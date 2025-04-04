@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import List
+from datetime import date, datetime
 
 
 
@@ -29,6 +30,37 @@ class GroupInfoCreate(GroupInfoBase):
     pass
 
 class GroupInfo(GroupInfoBase):
+    id: int  # Добавляем поле id, которое будет целым числом
+
+    class Config:
+        orm_mode = True  
+
+class NewsBase(BaseModel):
+   image_path: str
+   title: str
+   description: str
+   date: date
+
+class NewsCreate(NewsBase):
+    pass
+
+class News(NewsBase):
+    id: int  # Добавляем поле id, которое будет целым числом
+
+    class Config:
+        orm_mode = True  
+
+
+class EventsBase(BaseModel):
+   image_path: str
+   title: str
+   description: str
+   date: datetime
+
+class EventsCreate(EventsBase):
+    pass
+
+class Events(EventsBase):
     id: int  # Добавляем поле id, которое будет целым числом
 
     class Config:

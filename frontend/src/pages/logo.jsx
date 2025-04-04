@@ -39,6 +39,9 @@ function Logo() {
 					}, 1500) // 1 секунда
 				} catch (error) {
 					console.error('Ошибка при отправке запроса:', error)
+					setTimeout(() => {
+						navigate('/login')
+					}, 1500) // 1 секунда
 				}
 			}
 			checkUserExists(userId)

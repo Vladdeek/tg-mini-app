@@ -69,10 +69,6 @@ function Profile() {
 		fetchGroupInfo()
 	}, [userData])
 
-	// Рендер
-	if (loading) return <div>Загрузка...</div>
-	if (error) return <div>Ошибка: {error}</div>
-
 	return (
 		<div className='p-5'>
 			<div className='flex flex-col'>

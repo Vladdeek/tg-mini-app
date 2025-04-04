@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 
-function EventCard({ ImagePath, title, date, HandleNews, time }) {
+function EventCard({ ImagePath, title, date, handleEvent, id }) {
 	return (
 		<>
-			<div className='flex gap-3 mb-5' onClick={HandleNews}>
+			<div className='flex gap-3 mb-5' onClick={() => handleEvent(id)}>
 				<img
 					src={ImagePath}
 					alt=''
@@ -13,9 +13,7 @@ function EventCard({ ImagePath, title, date, HandleNews, time }) {
 					<p className='h-18 font-semibold'>{title}</p>
 					<div className='flex gap-2 opacity-50 items-center'>
 						<img src='icons/calendar-clock.svg' alt='' className='h-5' />
-						<p>
-							{date} - {time}
-						</p>
+						<p>{date}</p>
 					</div>
 				</div>
 			</div>

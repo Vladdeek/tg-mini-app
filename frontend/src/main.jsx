@@ -28,8 +28,8 @@ createRoot(document.getElementById('root')).render(
 				<Route path='/exams' element={<Exams />} />
 				<Route path='/certificate' element={<Certificate />} />
 				<Route path='/profile' element={<Profile />} />
-				<Route path='/event' element={<OneEventPage />} />
-				<Route path='/new' element={<OneNewsPage />} />
+				<Route path='/events/:id' element={<OneEventPage />} />
+				<Route path='/news/:id' element={<OneNewsPage />} />
 			</Routes>
 		</BrowserRouter>
 	</StrictMode>
