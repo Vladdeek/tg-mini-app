@@ -32,3 +32,12 @@ body {
 		opacity: 1;
 	}
 }
+
+.title {
+	display: -webkit-box;
+	line-clamp: 3;
+	-webkit-line-clamp: 3; /* Ограничиваем до 4 строк */
+	-webkit-box-orient: vertical;
+	overflow: hidden; /* Прячем лишний текст */
+	text-overflow: ellipsis; /* Добавляем многоточие */
+}

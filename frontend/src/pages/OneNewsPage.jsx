@@ -54,7 +54,9 @@ function OneNewsPage() {
 						<div className='p-4'>
 							<p className='text-3xl font-bold mb-5'>{newsData.title}</p>
 							<div className='flex flex-col text-2xl font-light mb-3 gap-3'>
-								<p>{newsData.description}</p>
+								<div
+									dangerouslySetInnerHTML={{ __html: newsData.description }}
+								/>
 							</div>
 						</div>
 					</div>

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date, DateTime, ForeignKey, ARRAY #ForeignKey будет ссылаться на поле из другой таблицы 
+from sqlalchemy import Column, Integer, String, Date, DateTime, Text, ForeignKey, ARRAY #ForeignKey будет ссылаться на поле из другой таблицы 
 from sqlalchemy.orm import relationship # для создания связи между полями 
 from database import Base # все наше подключение которое которое на основе наших моделей создает таблицы в БД
 
@@ -24,10 +24,11 @@ class GroupInfo(Base):
 class News(Base):
     __tablename__ = "News"
 
-    id = Column(Integer, primary_key=True, index=True)# index=True - поиск по этому столбцу
+    id = Column(Integer, primary_key=True, index=True)# index=True - поиск по этому столбцу\
+    scrap_id = Column(Integer, index=True)
     image_path = Column(String, index=True)
     title = Column(String, index=True)
-    description = Column(String, index=True)
+    description = Column(Text)
     date = Column(Date, index=True)
 
 class Events(Base):

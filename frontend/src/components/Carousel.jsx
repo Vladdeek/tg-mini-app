@@ -16,7 +16,7 @@ const Slider = () => {
 					throw new Error('Ошибка')
 				}
 				const data = await response.json()
-				setNewsData(data.slice(-3)) // Берём только 3 последние новости
+				setNewsData(data.slice(0, 5)) // Берём первые 5 новостей
 			} catch (error) {
 				setError('Ошибка при загрузке новостей')
 			}

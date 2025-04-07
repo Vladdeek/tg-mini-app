@@ -1,9 +1,10 @@
 import random
 import ast
+import requests
 from fastapi import FastAPI, HTTPException, Path, Query, Body, Depends
 from typing import Optional, List, Dict, Annotated
 from sqlalchemy.orm import Session
-from sqlalchemy import func
+from sqlalchemy import func, desc
 from passlib.context import CryptContext # библиотека для ХЕША паролей 
 
 #импорт наших классов
@@ -77,15 +78,16 @@ async def check_user(userId: str, db: Session = Depends(get_db)):
 
 # Вывод всех данных
 @app.get("/news/", response_model=List[NewsSchema])
-async def news(db: Session = Depends(get_db)):
-    return db.query(News).all()
+async def get_news(db: Session = Depends(get_db)):
+    return db.query(News).order_by(desc(News.date)).all()
 
-@app.get("/news/{news_id}")
-async def check_news(news_id: str, db: Session = Depends(get_db)):
+
+@app.get("/news/{news_id}", response_model=NewsSchema)
+async def get_news(news_id: int, db: Session = Depends(get_db)):
     news = db.query(News).filter(News.id == news_id).first()
-    if news:
-        return news
-    raise HTTPException(status_code=404, detail="такой новости нет")
+    if not news:
+        raise HTTPException(status_code=404, detail="Новость не найдена")
+    return news
 
 # Вывод всех данных
 @app.get("/events/", response_model=List[EventsSchema])
@@ -102,6 +104,7 @@ async def check_event(event_id: str, db: Session = Depends(get_db)):
 @app.post("/news/", response_model=NewsSchema)  
 async def create_news(news: NewsCreate, db: Session = Depends(get_db)) -> NewsSchema:
     db_news = News(
+        scrap_id=news.scrap_id,
         title=news.title,
         description=news.description,
         image_path=news.image_path,

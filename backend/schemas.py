@@ -36,6 +36,7 @@ class GroupInfo(GroupInfoBase):
         orm_mode = True  
 
 class NewsBase(BaseModel):
+   scrap_id: int
    image_path: str
    title: str
    description: str

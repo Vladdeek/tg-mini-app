@@ -44,7 +44,7 @@ function News() {
 					throw new Error('Ошибка')
 				}
 				const data = await response.json()
-				setNewsData(data)
+				setNewsData(data) // Берём первые 5 новостей
 			} catch (error) {
 				setError('Ошибка при загрузке новостей')
 			}
