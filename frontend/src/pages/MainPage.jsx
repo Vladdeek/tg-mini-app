@@ -33,7 +33,7 @@ function MainPage() {
 			}
 		}
 		checkUserExists(userId)
-	}, []) // Срабатывает при изменении userId
+	}, [])
 
 	return (
 		<>

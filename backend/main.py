@@ -3,14 +3,14 @@ import ast
 import requests
 from fastapi import FastAPI, HTTPException, Path, Query, Body, Depends
 from typing import Optional, List, Dict, Annotated
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import func, desc
 from passlib.context import CryptContext # библиотека для ХЕША паролей 
 
 #импорт наших классов
 from database import engine, session_local
-from models import Base, User, GroupInfo, News, Events
-from schemas import UserCreate, User as UserSchema, GroupInfoBase, GroupInfo as GroupInfoSchema, NewsCreate, News as NewsSchema, EventsCreate, Events as EventsSchema
+from models import Base, Certificate, User, GroupInfo, News, Events
+from schemas import UserCreate, User as UserSchema, GroupInfoBase, GroupInfo as GroupInfoSchema, NewsCreate, News as NewsSchema, EventsCreate, Events as EventsSchema, CertificateCreate, Certificate as CertificateSchema
 
 
 app = FastAPI()
@@ -129,3 +129,49 @@ async def event_news(event: EventsCreate, db: Session = Depends(get_db)) -> Even
     db.refresh(db_event)
 
     return db_event
+
+@app.post("/certificate/", response_model=CertificateSchema)
+async def create_certificate(certificate: CertificateCreate, db: Session = Depends(get_db)):
+    db_certificate = Certificate(
+        user_id=certificate.user_id,
+        cer_type_id=certificate.cer_type_id,
+        status_id=certificate.status_id,
+        count=certificate.count,
+        date=certificate.date
+    )
+    db.add(db_certificate)
+    db.commit()
+    db.refresh(db_certificate)
+    return db_certificate
+
+
+@app.get("/certificate/", response_model=List[CertificateSchema])
+async def get_certificates(db: Session = Depends(get_db)):
+    return db.query(Certificate)\
+        .options(
+            joinedload(Certificate.user),
+            joinedload(Certificate.cer_type)
+        ).all()
+
+@app.get("/certificate/{id}", response_model=List[CertificateSchema])
+async def get_certificates(id: str, db: Session = Depends(get_db)):
+    return db.query(Certificate)\
+        .options(
+            joinedload(Certificate.user),
+            joinedload(Certificate.cer_type)
+        ).filter(Certificate.user_id == id).all()
+
+@app.post("/certificate/", response_model=CertificateSchema)
+async def create_certificate(certificate: CertificateCreate, db: Session = Depends(get_db)):
+    db_certificate = Certificate(
+        user_id=certificate.user_id,
+        cer_type_id=certificate.cer_type_id,
+        status_id=certificate.status_id,
+        count=certificate.count,
+        date=certificate.date,
+    )
+    db.add(db_certificate)
+    db.commit()
+    db.refresh(db_certificate)
+    
+    return db_certificate

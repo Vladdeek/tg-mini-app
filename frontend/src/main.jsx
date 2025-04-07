@@ -14,6 +14,8 @@ import Profile from './pages/Profile.jsx'
 import OneEventPage from './pages/OneEventPage.jsx'
 import OneNewsPage from './pages/OneNewsPage.jsx'
 import Logo from './pages/logo.jsx'
+import AllNews from './pages/AllNews.jsx'
+import AdminCertificate from './admin/AdminCertificate.jsx'
 
 createRoot(document.getElementById('root')).render(
 	<StrictMode>
@@ -30,6 +32,8 @@ createRoot(document.getElementById('root')).render(
 				<Route path='/profile' element={<Profile />} />
 				<Route path='/events/:id' element={<OneEventPage />} />
 				<Route path='/news/:id' element={<OneNewsPage />} />
+				<Route path='/allnews/' element={<AllNews />} />
+				<Route path='/admincertificate/' element={<AdminCertificate />} />
 			</Routes>
 		</BrowserRouter>
 	</StrictMode>

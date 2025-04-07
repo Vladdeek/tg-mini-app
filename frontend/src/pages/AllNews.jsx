@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import Slider from '../components/Carousel'
 import NewsCard from '../components/NewsCard'
 
-function News() {
+function AllNews() {
 	const navigate = useNavigate()
 	const [newsData, setNewsData] = useState([])
 	const [error, setError] = useState(null)
@@ -44,7 +44,7 @@ function News() {
 					throw new Error('Ошибка')
 				}
 				const data = await response.json()
-				setNewsData(data.slice(0, 10))
+				setNewsData(data) // Берём первые 5 новостей
 			} catch (error) {
 				setError('Ошибка при загрузке новостей')
 			}
@@ -69,19 +69,7 @@ function News() {
 						className='h-15 bg-[#00000015] p-3 rounded-[20px] shadow-md'
 					/>
 				</button>
-				<p className='font-bold text-4xl opacity-75 mb-13'>Срочные новости</p>
-				<Slider />
-				<div className='flex justify-between'>
-					<p className='font-semibold text-xl opacity-75 mt-5 mb-5'>
-						Последние новости
-					</p>
-					<p
-						className='text-blue-700 font-semibold text-lg opacity-75 mt-5 mb-5'
-						onClick={() => navigate('/allnews')}
-					>
-						Все новости
-					</p>
-				</div>
+				<p className='font-bold text-4xl opacity-75 mb-13'>Все новости</p>
 
 				{newsData.length > 0 ? (
 					newsData.map(newsItem => (
@@ -89,8 +77,8 @@ function News() {
 							key={newsItem.id}
 							id={newsItem.id}
 							title={newsItem.title}
-							ImagePath={newsItem.image_path} // Здесь предполагаем, что есть URL изображения
-							date={formatDate(newsItem.date)} // Применяем функцию для форматирования даты
+							ImagePath={newsItem.image_path}
+							date={formatDate(newsItem.date)}
 							handleNews={handleNews}
 						/>
 					))
@@ -102,4 +90,4 @@ function News() {
 	)
 }
 
-export default News
+export default AllNews

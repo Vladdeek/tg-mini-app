@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 from datetime import date, datetime
 
 
@@ -62,6 +62,50 @@ class EventsCreate(EventsBase):
     pass
 
 class Events(EventsBase):
+    id: int  # Добавляем поле id, которое будет целым числом
+
+    class Config:
+        orm_mode = True  
+
+class CerTypeBase(BaseModel):
+   CerType: str
+
+class CerTypeCreate(CerTypeBase):
+    pass
+
+class CerType(CerTypeBase):
+    id: int  # Добавляем поле id, которое будет целым числом
+
+    class Config:
+        orm_mode = True  
+
+
+class StatusBase(BaseModel):
+    status_name: str
+
+class StatusCreate(StatusBase):
+    pass
+
+class Status(StatusBase):
+    id: int  # Добавляем поле id, которое будет целым числом
+
+    class Config:
+        orm_mode = True  
+
+
+class CertificateBase(BaseModel):
+   user_id: int
+   cer_type_id: int
+   status_id: int
+   count: int
+   date: date
+   user: Optional[User]
+   cer_type: Optional[CerType]
+
+class CertificateCreate(CertificateBase):
+    pass
+
+class Certificate(CertificateBase):
     id: int  # Добавляем поле id, которое будет целым числом
 
     class Config:
