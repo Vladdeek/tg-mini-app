@@ -21,6 +21,11 @@ class GroupInfo(Base):
     department = Column(String, index=True)
     profile = Column(String, index=True)
     specialty = Column(String, index=True)
+    course = Column(Integer, index=True)
+    name = Column(String, index=True)
+
+    schedule = relationship("Schedule", back_populates="group_info")
+
 
 class News(Base):
     __tablename__ = "News"
@@ -65,6 +70,7 @@ class Certificate(Base):
     cer_type_id = Column(Integer, ForeignKey('CerType.id'), nullable=False) 
     status_id = Column(Integer, ForeignKey('Status.id'), nullable=False)  
     count = Column(Integer)  
+    description = Column(String)
     date = Column(DateTime, index=True)
 
     # Связь с таблицей User
@@ -73,6 +79,58 @@ class Certificate(Base):
     cer_type = relationship("CerType", back_populates="certificates")
     # Связь с таблицей Status
     status = relationship("Status", back_populates="certificates")
+
+class Auditoria(Base):
+    __tablename__ = 'Auditoria'
+
+    id = Column(Integer, primary_key=True, index=True)
+    auditoria = Column(String)
+
+    schedule = relationship("Schedule", back_populates="auditoria")
+
+class Teacher(Base):
+    __tablename__ = 'Teacher'
+
+    id = Column(Integer, primary_key=True, index=True)
+    teacher = Column(String)
+
+    schedule = relationship("Schedule", back_populates="teacher")
+
+class Subject(Base):
+    __tablename__ = 'Subject'
+
+    id = Column(Integer, primary_key=True, index=True)
+    subject = Column(String)
+
+    schedule = relationship("Schedule", back_populates="subject")
+
+class WeekDay(Base):
+    __tablename__ = 'WeekDay'
+
+    id = Column(Integer, primary_key=True, index=True)
+    weekday = Column(String)
+
+    schedule = relationship("Schedule", back_populates="weekday")
+
+
+class Schedule(Base):
+    __tablename__ = 'Schedule'
+
+    id = Column(Integer, primary_key=True, index=True)
+    aud_id = Column(Integer, ForeignKey('Auditoria.id'), nullable=False)  
+    teacher_id = Column(Integer, ForeignKey('Teacher.id'), nullable=False) 
+    sub_id = Column(Integer, ForeignKey('Subject.id'), nullable=False)  
+    group_id = Column(Integer, ForeignKey('GroupInfo.id'), nullable=False)
+    weekday_id = Column(Integer, ForeignKey('WeekDay.id'), nullable=False)  # исправил связь с WeekDay, не GroupInfo
+    number = Column(Integer)
+    
+    auditoria = relationship("Auditoria", back_populates="schedule")
+    teacher = relationship("Teacher", back_populates="schedule")
+    subject = relationship("Subject", back_populates="schedule")
+    group_info = relationship("GroupInfo", back_populates="schedule")  # явно указываем foreign_key
+    weekday = relationship("WeekDay", back_populates="schedule")  # явно указываем foreign_key
+
+
 
 
 # Этот файл описывает каждую табличку для БД

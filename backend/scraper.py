@@ -122,3 +122,4 @@ class Scraper():
 # Запуск парсера
 scraper = Scraper()
 scraper.scrap_all()
+

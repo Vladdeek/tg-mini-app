@@ -5,6 +5,29 @@ import CertificateCard from './components/CertificateCard'
 function AdminCertificate({}) {
 	const [Data, setData] = useState([])
 
+	const updateCertificateStatus = async id => {
+		console.log('✅ id', id)
+		try {
+			const response = await fetch(
+				`http://192.168.167.48:8000/certificates/${id}/update-status`,
+				{
+					method: 'PUT',
+				}
+			)
+
+			if (!response.ok) {
+				const errorData = await response.json()
+				throw new Error(errorData.detail || 'Не удалось обновить статус')
+			}
+
+			const data = await response.json()
+			console.log('✅ Статус обновлён:', data)
+			setData(prevData => prevData.filter(item => item.id !== id))
+		} catch (error) {
+			console.error('❌ Ошибка при обновлении статуса:', error)
+		}
+	}
+
 	useEffect(() => {
 		const fetchCertificates = async () => {
 			try {
@@ -32,7 +55,9 @@ function AdminCertificate({}) {
 							date={Item.date}
 							Group={Item.user?.user_group || '—'}
 							Count={Item.count}
-							Type={Item.cer_type?.CerType || '—'}
+							description={Item.description}
+							type={Item.cer_type?.CerType || '—'}
+							UpdateStatus={() => updateCertificateStatus(Item.id)}
 						/>
 					))
 				) : (

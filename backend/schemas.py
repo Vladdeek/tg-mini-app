@@ -25,6 +25,8 @@ class GroupInfoBase(BaseModel):
     department: str   
     profile: str      
     specialty: str    
+    name: str
+    course: int
 
 class GroupInfoCreate(GroupInfoBase):
     pass
@@ -98,6 +100,7 @@ class CertificateBase(BaseModel):
    cer_type_id: int
    status_id: int
    count: int
+   description: str
    date: date
    user: Optional[User]
    cer_type: Optional[CerType]
@@ -110,6 +113,71 @@ class Certificate(CertificateBase):
 
     class Config:
         orm_mode = True  
+
+class AuditoriaBase(BaseModel):
+    auditoria: str
+
+class AuditoriaCreate(AuditoriaBase):
+    pass
+
+class Auditoria(AuditoriaBase):
+    id: int  # Добавляем поле id, которое будет целым числом
+
+    class Config:
+        orm_mode = True  
+
+class TeacherBase(BaseModel):
+    teacher: str
+
+class TeacherCreate(TeacherBase):
+    pass
+
+class Teacher(TeacherBase):
+    id: int  # Добавляем поле id, которое будет целым числом
+
+    class Config:
+        orm_mode = True  
+
+class SubjectBase(BaseModel):
+    subject: str
+
+class SubjectCreate(SubjectBase):
+    pass
+
+class Subject(SubjectBase):
+    id: int  # Добавляем поле id, которое будет целым числом
+
+    class Config:
+        orm_mode = True  
+
+class WeekDayBase(BaseModel):
+    weekday: str
+
+class WeekDayCreate(WeekDayBase):
+    pass
+
+class WeekDay(WeekDayBase):
+    id: int  # Добавляем поле id, которое будет целым числом
+
+    class Config:
+        orm_mode = True  
+
+class ScheduleBase(BaseModel):
+    aud_id: Optional[Auditoria]  # Ссылаемся на объект Auditoria
+    teacher_id: Optional[Teacher]  # Ссылаемся на объект Teacher
+    sub_id: Optional[Subject]  # Ссылаемся на объект Subject
+    group_id: Optional[GroupInfo]  # Ссылаемся на объект GroupInfo
+    weekday_id: Optional[WeekDay]  # Ссылаемся на объект WeekDay
+    number: int
+
+class ScheduleCreate(ScheduleBase):
+    pass
+
+class Schedule(ScheduleBase):
+    id: int  # Добавляем поле id, которое будет целым числом
+
+    class Config:
+        orm_mode = True
 
 
 

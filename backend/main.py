@@ -9,8 +9,8 @@ from passlib.context import CryptContext # библиотека для ХЕША 
 
 #импорт наших классов
 from database import engine, session_local
-from models import Base, Certificate, User, GroupInfo, News, Events
-from schemas import UserCreate, User as UserSchema, GroupInfoBase, GroupInfo as GroupInfoSchema, NewsCreate, News as NewsSchema, EventsCreate, Events as EventsSchema, CertificateCreate, Certificate as CertificateSchema
+from models import Base, Certificate, User, GroupInfo, News, Events, Schedule, Auditoria, Subject, WeekDay, Teacher
+from schemas import UserCreate, User as UserSchema, GroupInfoBase, GroupInfo as GroupInfoSchema, NewsCreate, News as NewsSchema, EventsCreate, Events as EventsSchema, CertificateCreate, Certificate as CertificateSchema, ScheduleCreate, ScheduleBase, Schedule as ScheduleSchema, TeacherCreate, Teacher as TeacherSchema, SubjectCreate, Subject as SubjectSchema, AuditoriaCreate, Auditoria as AuditoriaSchema, WeekDayCreate, WeekDay as WeekDaySchema
 
 
 app = FastAPI()
@@ -130,28 +130,13 @@ async def event_news(event: EventsCreate, db: Session = Depends(get_db)) -> Even
 
     return db_event
 
-@app.post("/certificate/", response_model=CertificateSchema)
-async def create_certificate(certificate: CertificateCreate, db: Session = Depends(get_db)):
-    db_certificate = Certificate(
-        user_id=certificate.user_id,
-        cer_type_id=certificate.cer_type_id,
-        status_id=certificate.status_id,
-        count=certificate.count,
-        date=certificate.date
-    )
-    db.add(db_certificate)
-    db.commit()
-    db.refresh(db_certificate)
-    return db_certificate
-
-
 @app.get("/certificate/", response_model=List[CertificateSchema])
 async def get_certificates(db: Session = Depends(get_db)):
     return db.query(Certificate)\
         .options(
             joinedload(Certificate.user),
             joinedload(Certificate.cer_type)
-        ).all()
+        ).filter(Certificate.status_id == 1).all()
 
 @app.get("/certificate/{id}", response_model=List[CertificateSchema])
 async def get_certificates(id: str, db: Session = Depends(get_db)):
@@ -168,6 +153,7 @@ async def create_certificate(certificate: CertificateCreate, db: Session = Depen
         cer_type_id=certificate.cer_type_id,
         status_id=certificate.status_id,
         count=certificate.count,
+        description=certificate.description,
         date=certificate.date,
     )
     db.add(db_certificate)
@@ -175,3 +161,44 @@ async def create_certificate(certificate: CertificateCreate, db: Session = Depen
     db.refresh(db_certificate)
     
     return db_certificate
+
+
+@app.put("/certificates/{certificate_id}/update-status")
+def update_certificate_status(certificate_id: int, db: Session = Depends(get_db)):
+    cert = db.query(Certificate).filter(Certificate.id == certificate_id).first()
+    
+    if not cert:
+        raise HTTPException(status_code=404, detail="Certificate not found or status is not 1")
+
+    cert.status_id = 2
+    db.commit()
+    db.refresh(cert)
+    return {"message": "Status updated successfully", "certificate_id": cert.id}
+
+@app.get("/schedule/", response_model=List[ScheduleSchema])
+async def get_schedule(db: Session = Depends(get_db)):
+    return db.query(Schedule)\
+        .options(
+            joinedload(Schedule.auditoria),  
+            joinedload(Schedule.group_info),  
+            joinedload(Schedule.weekday),   
+            joinedload(Schedule.subject),   
+            joinedload(Schedule.teacher)     
+        ).all()
+
+# Вывод всех данных
+@app.get("/auditories/", response_model=List[AuditoriaSchema])
+async def get_a(db: Session = Depends(get_db)):
+    return db.query(Auditoria).all()
+
+@app.get("/teachers/", response_model=List[TeacherSchema])
+async def get_t(db: Session = Depends(get_db)):
+    return db.query(Teacher).all()
+
+@app.get("/subjects/", response_model=List[SubjectSchema])
+async def get_s(db: Session = Depends(get_db)):
+    return db.query(Subject).all()
+
+@app.get("/weekdays/", response_model=List[WeekDaySchema])
+async def get_w(db: Session = Depends(get_db)):
+    return db.query(WeekDay).all()
