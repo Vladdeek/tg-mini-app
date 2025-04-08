@@ -12,6 +12,9 @@ class User(Base):
     user_group = Column(String, index=True)
 
     certificates = relationship("Certificate", back_populates="user")
+
+
+
 class GroupInfo(Base):
     __tablename__ = "GroupInfo"
 
@@ -27,6 +30,7 @@ class GroupInfo(Base):
     schedule = relationship("Schedule", back_populates="group_info")
 
 
+
 class News(Base):
     __tablename__ = "News"
 
@@ -37,6 +41,7 @@ class News(Base):
     description = Column(Text)
     date = Column(Date, index=True)
 
+
 class Events(Base):
     __tablename__ = "Events"
 
@@ -46,6 +51,7 @@ class Events(Base):
     description = Column(String, index=True)
     date = Column(DateTime, index=True)
 
+
 class Status(Base):
     __tablename__ = "Status"
 
@@ -54,6 +60,8 @@ class Status(Base):
 
     certificates = relationship("Certificate", back_populates="status")
 
+
+
 class CerType(Base):
     __tablename__ = "CerType"
 
@@ -61,6 +69,7 @@ class CerType(Base):
     CerType = Column(String, index=True) 
 
     certificates = relationship("Certificate", back_populates="cer_type")
+
 
 class Certificate(Base):
     __tablename__ = "Certificate"
@@ -80,11 +89,12 @@ class Certificate(Base):
     # Связь с таблицей Status
     status = relationship("Status", back_populates="certificates")
 
+
 class Auditoria(Base):
     __tablename__ = 'Auditoria'
 
     id = Column(Integer, primary_key=True, index=True)
-    auditoria = Column(String)
+    auditoria = Column(String, index=True)
 
     schedule = relationship("Schedule", back_populates="auditoria")
 
@@ -92,7 +102,7 @@ class Teacher(Base):
     __tablename__ = 'Teacher'
 
     id = Column(Integer, primary_key=True, index=True)
-    teacher = Column(String)
+    teacher = Column(String, index=True)
 
     schedule = relationship("Schedule", back_populates="teacher")
 
@@ -100,7 +110,7 @@ class Subject(Base):
     __tablename__ = 'Subject'
 
     id = Column(Integer, primary_key=True, index=True)
-    subject = Column(String)
+    subject = Column(String, index=True)
 
     schedule = relationship("Schedule", back_populates="subject")
 
@@ -108,31 +118,23 @@ class WeekDay(Base):
     __tablename__ = 'WeekDay'
 
     id = Column(Integer, primary_key=True, index=True)
-    weekday = Column(String)
+    weekday = Column(String, index=True)
 
     schedule = relationship("Schedule", back_populates="weekday")
-
 
 class Schedule(Base):
     __tablename__ = 'Schedule'
 
     id = Column(Integer, primary_key=True, index=True)
+    number = Column(Integer)
     aud_id = Column(Integer, ForeignKey('Auditoria.id'), nullable=False)  
     teacher_id = Column(Integer, ForeignKey('Teacher.id'), nullable=False) 
     sub_id = Column(Integer, ForeignKey('Subject.id'), nullable=False)  
     group_id = Column(Integer, ForeignKey('GroupInfo.id'), nullable=False)
-    weekday_id = Column(Integer, ForeignKey('WeekDay.id'), nullable=False)  # исправил связь с WeekDay, не GroupInfo
-    number = Column(Integer)
-    
+    weekday_id = Column(Integer, ForeignKey('WeekDay.id'), nullable=False)  # исправил связь с WeekDay
+
     auditoria = relationship("Auditoria", back_populates="schedule")
     teacher = relationship("Teacher", back_populates="schedule")
     subject = relationship("Subject", back_populates="schedule")
-    group_info = relationship("GroupInfo", back_populates="schedule")  # явно указываем foreign_key
-    weekday = relationship("WeekDay", back_populates="schedule")  # явно указываем foreign_key
-
-
-
-
-# Этот файл описывает каждую табличку для БД
-# на основе этого файла на основе этих классов 
-# будут созданы разные таблицы в БД
+    group_info = relationship("GroupInfo", back_populates="schedule")  
+    weekday = relationship("WeekDay", back_populates="schedule")

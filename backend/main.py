@@ -9,8 +9,8 @@ from passlib.context import CryptContext # библиотека для ХЕША 
 
 #импорт наших классов
 from database import engine, session_local
-from models import Base, Certificate, User, GroupInfo, News, Events, Schedule, Auditoria, Subject, WeekDay, Teacher
-from schemas import UserCreate, User as UserSchema, GroupInfoBase, GroupInfo as GroupInfoSchema, NewsCreate, News as NewsSchema, EventsCreate, Events as EventsSchema, CertificateCreate, Certificate as CertificateSchema, ScheduleCreate, ScheduleBase, Schedule as ScheduleSchema, TeacherCreate, Teacher as TeacherSchema, SubjectCreate, Subject as SubjectSchema, AuditoriaCreate, Auditoria as AuditoriaSchema, WeekDayCreate, WeekDay as WeekDaySchema
+from models import Base, Certificate, User, GroupInfo, News, Events, Schedule
+from schemas import UserCreate, User as UserSchema, GroupInfoBase, GroupInfo as GroupInfoSchema, NewsCreate, News as NewsSchema, EventsCreate, Events as EventsSchema, CertificateCreate, Certificate as CertificateSchema, Schedule as ScheduleSchema
 
 
 app = FastAPI()
@@ -177,28 +177,11 @@ def update_certificate_status(certificate_id: int, db: Session = Depends(get_db)
 
 @app.get("/schedule/", response_model=List[ScheduleSchema])
 async def get_schedule(db: Session = Depends(get_db)):
-    return db.query(Schedule)\
-        .options(
-            joinedload(Schedule.auditoria),  
-            joinedload(Schedule.group_info),  
-            joinedload(Schedule.weekday),   
-            joinedload(Schedule.subject),   
-            joinedload(Schedule.teacher)     
-        ).all()
-
-# Вывод всех данных
-@app.get("/auditories/", response_model=List[AuditoriaSchema])
-async def get_a(db: Session = Depends(get_db)):
-    return db.query(Auditoria).all()
-
-@app.get("/teachers/", response_model=List[TeacherSchema])
-async def get_t(db: Session = Depends(get_db)):
-    return db.query(Teacher).all()
-
-@app.get("/subjects/", response_model=List[SubjectSchema])
-async def get_s(db: Session = Depends(get_db)):
-    return db.query(Subject).all()
-
-@app.get("/weekdays/", response_model=List[WeekDaySchema])
-async def get_w(db: Session = Depends(get_db)):
-    return db.query(WeekDay).all()
+    schedules = db.query(Schedule).options(
+        joinedload(Schedule.auditoria),
+        joinedload(Schedule.teacher),
+        joinedload(Schedule.subject),
+        joinedload(Schedule.group_info),
+        joinedload(Schedule.weekday)
+    ).all()
+    return schedules

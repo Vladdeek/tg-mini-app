@@ -19,6 +19,42 @@ class User(UserBase):
     class Config:
         orm_mode = True
 
+class AuditoriaBase(BaseModel):
+    auditoria: str
+
+class Auditoria(AuditoriaBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+class TeacherBase(BaseModel):
+    teacher: str
+
+class Teacher(TeacherBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+class SubjectBase(BaseModel):
+    subject: str
+
+class Subject(SubjectBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+class WeekDayBase(BaseModel):
+    weekday: str
+
+class WeekDay(WeekDayBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
 class GroupInfoBase(BaseModel):
     group_number: str  
     faculty: str     
@@ -28,14 +64,25 @@ class GroupInfoBase(BaseModel):
     name: str
     course: int
 
-class GroupInfoCreate(GroupInfoBase):
-    pass
-
 class GroupInfo(GroupInfoBase):
-    id: int  # Добавляем поле id, которое будет целым числом
+    id: int
 
     class Config:
-        orm_mode = True  
+        orm_mode = True
+
+class ScheduleBase(BaseModel):
+    number: int
+    auditoria: Auditoria
+    teacher: Teacher
+    subject: Subject
+    group_info: GroupInfo
+    weekday: WeekDay
+
+class Schedule(ScheduleBase):
+    id: int
+
+    class Config:
+        orm_mode = True
 
 class NewsBase(BaseModel):
    scrap_id: int
@@ -114,74 +161,55 @@ class Certificate(CertificateBase):
     class Config:
         orm_mode = True  
 
-class AuditoriaBase(BaseModel):
+class AuditoriaSchema(BaseModel):
+    id: int
     auditoria: str
-
-class AuditoriaCreate(AuditoriaBase):
-    pass
-
-class Auditoria(AuditoriaBase):
-    id: int  # Добавляем поле id, которое будет целым числом
-
-    class Config:
-        orm_mode = True  
-
-class TeacherBase(BaseModel):
-    teacher: str
-
-class TeacherCreate(TeacherBase):
-    pass
-
-class Teacher(TeacherBase):
-    id: int  # Добавляем поле id, которое будет целым числом
-
-    class Config:
-        orm_mode = True  
-
-class SubjectBase(BaseModel):
-    subject: str
-
-class SubjectCreate(SubjectBase):
-    pass
-
-class Subject(SubjectBase):
-    id: int  # Добавляем поле id, которое будет целым числом
-
-    class Config:
-        orm_mode = True  
-
-class WeekDayBase(BaseModel):
-    weekday: str
-
-class WeekDayCreate(WeekDayBase):
-    pass
-
-class WeekDay(WeekDayBase):
-    id: int  # Добавляем поле id, которое будет целым числом
-
-    class Config:
-        orm_mode = True  
-
-class ScheduleBase(BaseModel):
-    aud_id: Optional[Auditoria]  # Ссылаемся на объект Auditoria
-    teacher_id: Optional[Teacher]  # Ссылаемся на объект Teacher
-    sub_id: Optional[Subject]  # Ссылаемся на объект Subject
-    group_id: Optional[GroupInfo]  # Ссылаемся на объект GroupInfo
-    weekday_id: Optional[WeekDay]  # Ссылаемся на объект WeekDay
-    number: int
-
-class ScheduleCreate(ScheduleBase):
-    pass
-
-class Schedule(ScheduleBase):
-    id: int  # Добавляем поле id, которое будет целым числом
 
     class Config:
         orm_mode = True
 
+class TeacherSchema(BaseModel):
+    id: int
+    teacher: str
 
+    class Config:
+        orm_mode = True
 
-# Здесь описаны различные схемы,
-# нужны для описания API
-# нужны для описания того что мы будем принимать
-# и что мы будем принимать 
+class SubjectSchema(BaseModel):
+    id: int
+    subject: str
+
+    class Config:
+        orm_mode = True
+
+class GroupInfoSchema(BaseModel):
+    id: int
+    group_number: str
+    faculty: str
+    department: str
+    profile: str
+    specialty: str
+    course: int
+    name: str
+
+    class Config:
+        orm_mode = True
+
+class WeekDaySchema(BaseModel):
+    id: int
+    weekday: str
+
+    class Config:
+        orm_mode = True
+
+class ScheduleSchema(BaseModel):
+    id: int
+    aud_id: AuditoriaSchema
+    teacher_id: TeacherSchema
+    sub_id: SubjectSchema
+    group_id: GroupInfoSchema
+    weekday_id: WeekDaySchema
+    number: int
+
+    class Config:
+        orm_mode = True
