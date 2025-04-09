@@ -4,14 +4,73 @@ import { useNavigate } from 'react-router-dom'
 import ScheduleCard from '../components/ScheduleCard'
 
 function Schedule() {
-	// Получаем день недели (0 - воскресенье, 1 - понедельник, и т.д.)
+	const [Data, setData] = useState([])
+
+	const Time = [
+		{ Time: '8:00-9:20' },
+		{ Time: '9:30-10:50' },
+		{ Time: '11:00-12:20' },
+		{ Time: '12:30-13:50' },
+		{ Time: '14:00-15:20' },
+		{ Time: '15:30-16:50' },
+		{ Time: '17:00-18:20' },
+		{ Time: '18:00-19:50' },
+	]
+
+	const [days, setDays] = useState([
+		{ DayName: 'пн', DayNum: '7', schedule: [] },
+		{ DayName: 'вт', DayNum: '8', schedule: [] },
+		{ DayName: 'ср', DayNum: '9', schedule: [] },
+		{ DayName: 'чт', DayNum: '10', schedule: [] },
+		{ DayName: 'пт', DayNum: '11', schedule: [] },
+		{ DayName: 'сб', DayNum: '12', schedule: [] },
+		{ DayName: 'вс', DayNum: '13', schedule: [] },
+	])
+
+	useEffect(() => {
+		const fetchCertificates = async () => {
+			try {
+				const response = await fetch(`http://192.168.167.48:8000/schedule/`)
+				if (!response.ok) throw new Error('Ошибка при получении расписания')
+				const data = await response.json()
+				setData(data)
+				console.log('данные из API:', data)
+
+				const updatedDays = [...days]
+
+				data.forEach(item => {
+					const dayIndex = updatedDays.findIndex(
+						day => day.DayName === item.weekday.weekday
+					)
+
+					if (dayIndex !== -1) {
+						const pairNumber = item.number
+						const time = Time[pairNumber - 1]?.Time || 'время не указано'
+
+						updatedDays[dayIndex].schedule.push({
+							time,
+							subject: item.subject.subject,
+							teacher: item.teacher.teacher,
+							auditoria: item.auditoria.auditoria,
+							number: pairNumber,
+						})
+					}
+				})
+
+				setDays(updatedDays)
+			} catch (error) {
+				console.error('Ошибка при загрузке данных:', error)
+			}
+		}
+		fetchCertificates()
+	}, [])
+
 	const todayIndex = new Date().getDay() === 0 ? 6 : new Date().getDay() - 1
 
 	const [activeIndex, setActiveIndex] = useState(todayIndex)
-	const [currentTime, setCurrentTime] = useState(new Date()) // Текущее время
+	const [currentTime, setCurrentTime] = useState(new Date())
 	const navigate = useNavigate()
 
-	// Обновляем время каждую минуту
 	useEffect(() => {
 		const interval = setInterval(() => {
 			setCurrentTime(new Date())
@@ -19,92 +78,8 @@ function Schedule() {
 		return () => clearInterval(interval)
 	}, [])
 
-	const days = [
-		{
-			DayName: 'пн',
-			DayNum: '31',
-			schedule: [
-				{ Descipline: 'TEST пн 31', Auditoria: '7.101', Time: '8:00-9:20' },
-				{ Descipline: 'TEST пн 31', Auditoria: '7.101', Time: '9:30-10:50' },
-				{ Descipline: 'TEST пн 31', Auditoria: '7.101', Time: '11:00-12:20' },
-				{ Descipline: 'TEST пн 31', Auditoria: '7.101', Time: '12:30-13:50' },
-				{ Descipline: 'TEST пн 31', Auditoria: '7.101', Time: '14:00-15:20' },
-				{ Descipline: 'TEST пн 31', Auditoria: '7.101', Time: '15:30-16:50' },
-				{ Descipline: 'TEST пн 31', Auditoria: '7.101', Time: '17:00-18:20' },
-				{ Descipline: 'TEST пн 31', Auditoria: '7.101', Time: '18:00-19:50' },
-			],
-		},
-		{
-			DayName: 'вт',
-			DayNum: '1',
-			schedule: [
-				{ Descipline: 'TEST вт 1', Auditoria: '7.101', Time: '8:00-9:20' },
-				{ Descipline: 'TEST вт 1', Auditoria: '7.101', Time: '9:30-10:50' },
-				{ Descipline: 'TEST вт 1', Auditoria: '7.101', Time: '11:00-12:20' },
-				{ Descipline: 'TEST вт 1', Auditoria: '7.101', Time: '12:30-13:50' },
-				{ Descipline: 'TEST вт 1', Auditoria: '7.101', Time: '14:00-15:20' },
-				{ Descipline: 'TEST вт 1', Auditoria: '7.101', Time: '15:30-16:50' },
-				{ Descipline: 'TEST вт 1', Auditoria: '7.101', Time: '17:00-18:20' },
-				{ Descipline: 'TEST вт 1', Auditoria: '7.101', Time: '18:00-19:50' },
-			],
-		},
-		{
-			DayName: 'ср',
-			DayNum: '2',
-			schedule: [
-				{ Descipline: 'TEST ср 2', Auditoria: '7.101', Time: '8:00-9:20' },
-				{ Descipline: 'TEST ср 2', Auditoria: '7.101', Time: '9:30-10:50' },
-				{ Descipline: 'TEST ср 2', Auditoria: '7.101', Time: '11:00-12:20' },
-				{ Descipline: 'TEST ср 2', Auditoria: '7.101', Time: '12:30-13:50' },
-				{ Descipline: 'TEST ср 2', Auditoria: '7.101', Time: '14:00-15:20' },
-				{ Descipline: 'TEST ср 2', Auditoria: '7.101', Time: '15:30-16:50' },
-				{ Descipline: 'TEST ср 2', Auditoria: '7.101', Time: '17:00-18:20' },
-				{ Descipline: 'TEST ср 2', Auditoria: '7.101', Time: '18:00-19:50' },
-			],
-		},
-		{
-			DayName: 'чт',
-			DayNum: '3',
-			schedule: [
-				{ Descipline: 'TEST чт 3', Auditoria: '7.101', Time: '8:00-9:20' },
-				{ Descipline: 'TEST чт 3', Auditoria: '7.101', Time: '9:30-10:50' },
-				{ Descipline: 'TEST чт 3', Auditoria: '7.101', Time: '11:00-12:20' },
-				{ Descipline: 'TEST чт 3', Auditoria: '7.101', Time: '12:30-13:50' },
-				{ Descipline: 'TEST чт 3', Auditoria: '7.101', Time: '14:00-15:20' },
-				{ Descipline: 'TEST чт 3', Auditoria: '7.101', Time: '15:30-16:50' },
-				{ Descipline: 'TEST чт 3', Auditoria: '7.101', Time: '17:00-18:20' },
-				{ Descipline: 'TEST чт 3', Auditoria: '7.101', Time: '18:00-19:50' },
-			],
-		},
-		{
-			DayName: 'пт',
-			DayNum: '4',
-			schedule: [
-				{ Descipline: 'TEST пт 4', Auditoria: '7.101', Time: '8:00-9:20' },
-				{ Descipline: 'TEST пт 4', Auditoria: '7.101', Time: '9:30-10:50' },
-				{ Descipline: 'TEST пт 4', Auditoria: '7.101', Time: '11:00-12:20' },
-				{ Descipline: 'TEST пт 4', Auditoria: '7.101', Time: '12:30-13:50' },
-				{ Descipline: 'TEST пт 4', Auditoria: '7.101', Time: '14:00-15:20' },
-				{ Descipline: 'TEST пт 4', Auditoria: '7.101', Time: '15:30-16:50' },
-				{ Descipline: 'TEST пт 4', Auditoria: '7.101', Time: '17:00-18:20' },
-				{ Descipline: 'TEST пт 4', Auditoria: '7.101', Time: '18:00-19:50' },
-			],
-		},
-		{
-			DayName: 'сб',
-			DayNum: '5',
-			schedule: [],
-		},
-		{
-			DayName: 'вс',
-			DayNum: '6',
-			schedule: [],
-		},
-	]
-
-	// Функция для проверки, идет ли сейчас пара
 	const isLessonActive = timeRange => {
-		if (activeIndex !== todayIndex) return false // Проверяем только для сегодняшнего дня
+		if (activeIndex !== todayIndex) return false
 
 		const [start, end] = timeRange.split('-')
 		const now = currentTime.getHours() * 60 + currentTime.getMinutes()
@@ -134,7 +109,7 @@ function Schedule() {
 				/>
 			</button>
 			<p className='text-3xl font-bold text-white text-center mb-10'>
-				Март 31 - Апрель 6
+				Апрель 7-13
 			</p>
 			<div className='w-full flex max-sm:gap-2 gap-0 justify-center mb-5'>
 				{days.map((day, index) => (
@@ -149,16 +124,18 @@ function Schedule() {
 			</div>
 			<div className='w-full h-2/3 bg-[#efefef] overflow-y-auto rounded-t-[66px] p-4'>
 				{days[activeIndex]?.schedule.length > 0 ? (
-					days[activeIndex].schedule.map((lesson, idx) => (
-						<ScheduleCard
-							key={idx}
-							Descipline={lesson.Descipline}
-							Auditoria={lesson.Auditoria}
-							Time={lesson.Time}
-							Teacher={lesson.Teacher}
-							isActiveLesson={isLessonActive(lesson.Time)}
-						/>
-					))
+					days[activeIndex].schedule.map(
+						({ subject, auditoria, time, teacher }, idx) => (
+							<ScheduleCard
+								key={idx}
+								Descipline={subject}
+								Auditoria={auditoria}
+								Time={time}
+								Teacher={teacher}
+								isActiveLesson={isLessonActive(time)}
+							/>
+						)
+					)
 				) : (
 					<p className='text-center text-gray-500'>Занятий нет</p>
 				)}

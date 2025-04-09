@@ -18,7 +18,7 @@ import AllNews from './pages/AllNews.jsx'
 import AdminCertificate from './admin/AdminCertificate.jsx'
 
 createRoot(document.getElementById('root')).render(
-	<StrictMode>
+	<>
 		<BrowserRouter>
 			<Routes>
 				<Route path='/' element={<Logo />} />
@@ -36,5 +36,5 @@ createRoot(document.getElementById('root')).render(
 				<Route path='/admincertificate/' element={<AdminCertificate />} />
 			</Routes>
 		</BrowserRouter>
-	</StrictMode>
+	</>
 )
