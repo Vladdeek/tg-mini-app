@@ -84,13 +84,6 @@ function Profile() {
 						className='h-15 p-3 rounded-[12px] shadow-md bg-[#00000025]'
 					/>
 				</button>
-				<div className='flex justify-center'>
-					<img
-						src='https://placehold.co/45x45'
-						alt=''
-						className='h-35 rounded-full bg-[#fefefe]'
-					/>
-				</div>
 				<div className='grid grid-cols-6 gap-3 mt-10'>
 					<div className='col-span-4'>
 						<p className='font-thin'>Ф.И.О.</p>

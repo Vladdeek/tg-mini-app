@@ -1,20 +1,31 @@
 import { useEffect, useState } from 'react'
 
-function ChapterCard({ ImagePath, title, HandleChapter }) {
+function ChapterCard({ ImagePath, title, HandleChapter, big }) {
 	return (
 		<div
-			className='h-40 w-full rounded-4xl bg-[#820000] p-5'
+			className={`flex flex-col justify-between h-full w-full rounded-3xl bg-[#820000] py-3 px-4
+			}`}
 			onClick={HandleChapter}
 		>
 			<div className='flex justify-between items-center'>
-				<img src={ImagePath} alt='' className='invert-100 h-12' />
+				<img
+					src={ImagePath}
+					alt=''
+					className={`invert-100 ${big ? 'h-15' : 'h-10'}`}
+				/>
 				<img
 					src='icons/arrow-right-svgrepo-com.svg'
 					alt=''
-					className='h-10 border-2 border-white rounded-xl mr-1'
+					className='h-10 rotate-[-45deg]'
 				/>
 			</div>
-			<p className='text-xl font-bold text-white mt-5'>{title}</p>
+			<p
+				className={`${
+					big ? 'text-3xl m-2' : 'text-lg'
+				} font-semibold text-white mt-2`}
+			>
+				{title}
+			</p>
 		</div>
 	)
 }

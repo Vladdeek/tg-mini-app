@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Weekday from '../components/Weekday'
 import { useNavigate } from 'react-router-dom'
 import ScheduleCard from '../components/ScheduleCard'
+import { motion } from 'framer-motion'
 
 function Schedule() {
 	const [Data, setData] = useState([])
@@ -29,10 +30,6 @@ function Schedule() {
 		{ DayName: 'пт', DayNum: '11', schedule: [] },
 		{ DayName: 'сб', DayNum: '12', schedule: [] },
 		{ DayName: 'вс', DayNum: '13', schedule: [] },
-		{ DayName: 'пн', DayNum: '14', schedule: [] },
-		{ DayName: 'вт', DayNum: '15', schedule: [] },
-		{ DayName: 'ср', DayNum: '16', schedule: [] },
-		{ DayName: 'чт', DayNum: '17', schedule: [] },
 	])
 
 	useEffect(() => {
@@ -176,14 +173,24 @@ function Schedule() {
 				{days[activeIndex]?.schedule.length > 0 ? (
 					days[activeIndex].schedule.map(
 						({ subject, auditoria, time, teacher }, idx) => (
-							<ScheduleCard
-								key={idx}
-								Descipline={subject}
-								Auditoria={auditoria}
-								Time={time}
-								Teacher={teacher}
-								isActiveLesson={isLessonActive(time)}
-							/>
+							<motion.div
+								key={`${activeIndex}-${idx}`}
+								initial={{ opacity: 0, y: 20, scale: 0.95 }}
+								animate={{ opacity: 1, y: 0, scale: 1 }}
+								transition={{
+									delay: idx * 0.15,
+									duration: 0.45,
+									ease: 'easeOut',
+								}}
+							>
+								<ScheduleCard
+									Descipline={subject}
+									Auditoria={auditoria}
+									Time={time}
+									Teacher={teacher}
+									isActiveLesson={isLessonActive(time)}
+								/>
+							</motion.div>
 						)
 					)
 				) : (

@@ -2,7 +2,7 @@ function Weekday({ DayName, DayNum, isActive, onClick }) {
 	return (
 		<div
 			onClick={onClick}
-			className={` h-25 flex flex-col items-center justify-center rounded-xl cursor-pointer transition-all ${
+			className={` h-25 flex flex-col items-center justify-center rounded-xl cursor-pointer transition-all duration-300 ${
 				isActive ? 'bg-white text-[#C10F1A]' : 'bg-[#ffffff33] text-white'
 			}`}
 		>

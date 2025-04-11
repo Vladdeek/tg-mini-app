@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import Slider from '../components/Carousel'
 import NewsCard from '../components/NewsCard'
+import { motion } from 'framer-motion'
 
 function News() {
 	const navigate = useNavigate()
@@ -84,15 +85,25 @@ function News() {
 				</div>
 
 				{newsData.length > 0 ? (
-					newsData.map(newsItem => (
-						<NewsCard
-							key={newsItem.id}
-							id={newsItem.id}
-							title={newsItem.title}
-							ImagePath={newsItem.image_path} // Здесь предполагаем, что есть URL изображения
-							date={formatDate(newsItem.date)} // Применяем функцию для форматирования даты
-							handleNews={handleNews}
-						/>
+					newsData.map((newsItem, idx) => (
+						<motion.div
+							key={`${newsItem.id}-${idx}`}
+							initial={{ opacity: 0, y: 20, scale: 0.95 }}
+							animate={{ opacity: 1, y: 0, scale: 1 }}
+							transition={{
+								delay: idx * 0.1,
+								duration: 0.35,
+								ease: 'easeOut',
+							}}
+						>
+							<NewsCard
+								id={newsItem.id}
+								title={newsItem.title}
+								ImagePath={newsItem.image_path}
+								date={formatDate(newsItem.date)}
+								handleNews={handleNews}
+							/>
+						</motion.div>
 					))
 				) : (
 					<p className='text-center text-gray-500'>Новостей нет</p>

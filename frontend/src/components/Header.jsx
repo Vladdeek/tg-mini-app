@@ -18,9 +18,9 @@ function Header({ username }) {
 			</div>
 			<button onClick={HandleSchedule}>
 				<img
-					src='https://placehold.co/1x1'
+					src='icons/user.svg'
 					alt=''
-					className='h-17 rounded-3xl mr-2'
+					className='h-15 rounded-3xl invert-100 p-3'
 				/>
 			</button>
 		</header>
