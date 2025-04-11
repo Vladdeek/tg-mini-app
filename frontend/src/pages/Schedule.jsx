@@ -35,7 +35,7 @@ function Schedule() {
 	useEffect(() => {
 		const checkUserExists = async () => {
 			const response = await fetch(
-				`http://192.168.167.48:8000/user/${userId}`,
+				`${import.meta.env.VITE_API_URL}/user/${userId}`,
 				{
 					method: 'GET',
 					headers: { 'Content-Type': 'application/json' },
@@ -56,7 +56,7 @@ function Schedule() {
 		const fetchGroupInfo = async () => {
 			if (userData && userData.user_group) {
 				const response = await fetch(
-					`http://192.168.167.48:8000/groupinfo/${userData.user_group}`,
+					`${import.meta.env.VITE_API_URL}/groupinfo/${userData.user_group}`,
 					{
 						method: 'GET',
 						headers: { 'Content-Type': 'application/json' },
@@ -78,7 +78,7 @@ function Schedule() {
 		const fetchCertificates = async () => {
 			if (groupData && groupData.id) {
 				const response = await fetch(
-					`http://192.168.167.48:8000/schedule/${groupData.id}`
+					`${import.meta.env.VITE_API_URL}/schedule/${groupData.id}`
 				)
 				if (!response.ok) throw new Error('Ошибка при получении расписания')
 				const data = await response.json()

@@ -9,7 +9,7 @@ function AdminCertificate({}) {
 		console.log('✅ id', id)
 		try {
 			const response = await fetch(
-				`http://192.168.167.48:8000/certificates/${id}/update-status`,
+				`${import.meta.env.VITE_API_URL}/certificates/${id}/update-status`,
 				{
 					method: 'PUT',
 				}
@@ -31,7 +31,9 @@ function AdminCertificate({}) {
 	useEffect(() => {
 		const fetchCertificates = async () => {
 			try {
-				const response = await fetch(`http://192.168.167.48:8000/certificate/`)
+				const response = await fetch(
+					`${import.meta.env.VITE_API_URL}/certificate/`
+				)
 				if (!response.ok) throw new Error('Ошибка при получении сертификатов')
 				const data = await response.json()
 				setData(data)

@@ -19,7 +19,7 @@ function OneEventPage() {
 		const fetchNews = async () => {
 			try {
 				const response = await fetch(
-					`http://192.168.167.48:8000/events/${id}`,
+					`${import.meta.env.VITE_API_URL}/events/${id}`,
 					{
 						method: 'GET',
 						headers: { 'Content-Type': 'application/json' },

@@ -25,13 +25,16 @@ function Login() {
 			}
 			console.log('Отправляем данные:', userData)
 
-			const response = await fetch('http://192.168.167.48:8000/reg_user/', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(userData),
-			})
+			const response = await fetch(
+				`${import.meta.env.VITE_API_URL}/reg_user/`,
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(userData),
+				}
+			)
 
 			if (!response.ok) {
 				const errorData = await response.json()

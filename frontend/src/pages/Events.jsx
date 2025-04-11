@@ -42,10 +42,13 @@ function Events({}) {
 	useEffect(() => {
 		const fetchNews = async () => {
 			try {
-				const response = await fetch('http://192.168.167.48:8000/events/', {
-					method: 'GET',
-					headers: { 'Content-Type': 'application/json' },
-				})
+				const response = await fetch(
+					`${import.meta.env.VITE_API_URL}/events/`,
+					{
+						method: 'GET',
+						headers: { 'Content-Type': 'application/json' },
+					}
+				)
 				if (!response.ok) {
 					throw new Error('Ошибка')
 				}

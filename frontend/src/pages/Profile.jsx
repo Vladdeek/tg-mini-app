@@ -22,7 +22,7 @@ function Profile() {
 
 			try {
 				const response = await fetch(
-					`http://192.168.167.48:8000/user/${userId}`,
+					`${import.meta.env.VITE_API_URL}/user/${userId}`,
 					{
 						method: 'GET',
 						headers: { 'Content-Type': 'application/json' },
@@ -49,7 +49,7 @@ function Profile() {
 			if (userData && userData.user_group) {
 				try {
 					const response = await fetch(
-						`http://192.168.167.48:8000/groupinfo/${userData.user_group}`,
+						`${import.meta.env.VITE_API_URL}/groupinfo/${userData.user_group}`,
 						{
 							method: 'GET',
 							headers: { 'Content-Type': 'application/json' },

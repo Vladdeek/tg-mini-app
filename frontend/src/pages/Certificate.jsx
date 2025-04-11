@@ -19,7 +19,7 @@ function Certificate() {
 		const fetchCertificates = async () => {
 			try {
 				const userResponse = await fetch(
-					`http://192.168.167.48:8000/user/${userId}`
+					`${import.meta.env.VITE_API_URL}/user/${userId}`
 				)
 				if (!userResponse.ok)
 					throw new Error('Ошибка при получении пользователя')
@@ -28,7 +28,7 @@ function Certificate() {
 				const userDbId = userData.id
 
 				const response = await fetch(
-					`http://192.168.167.48:8000/certificate/${userDbId}`
+					`${import.meta.env.VITE_API_URL}/certificate/${userDbId}`
 				)
 				if (!response.ok) throw new Error('Ошибка при получении сертификатов')
 
@@ -62,7 +62,7 @@ function Certificate() {
 
 		try {
 			const userResponse = await fetch(
-				`http://192.168.167.48:8000/user/${userId}`
+				`${import.meta.env.VITE_API_URL}/user/${userId}`
 			)
 			if (!userResponse.ok) throw new Error('Ошибка при получении пользователя')
 
@@ -71,30 +71,33 @@ function Certificate() {
 
 			const currentDate = new Date().toISOString().split('T')[0]
 
-			const response = await fetch('http://192.168.167.48:8000/certificate/', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					user_id: userDbId,
-					cer_type_id: cerTypeId,
-					status_id: 1,
-					count: Number(count),
-					description: desc,
-					date: currentDate,
-					user: {
-						user_id: 0,
-						user_fullname: '',
-						user_group: '',
-						id: 0,
+			const response = await fetch(
+				'${import.meta.env.VITE_API_URL}/certificate/',
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
 					},
-					cer_type: {
-						CerType: '',
-						id: 0,
-					},
-				}),
-			})
+					body: JSON.stringify({
+						user_id: userDbId,
+						cer_type_id: cerTypeId,
+						status_id: 1,
+						count: Number(count),
+						description: desc,
+						date: currentDate,
+						user: {
+							user_id: 0,
+							user_fullname: '',
+							user_group: '',
+							id: 0,
+						},
+						cer_type: {
+							CerType: '',
+							id: 0,
+						},
+					}),
+				}
+			)
 
 			if (response.ok) {
 				console.log('Справка заказана')

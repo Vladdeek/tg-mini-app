@@ -16,7 +16,7 @@ function Logo() {
 			const checkUserExists = async userId => {
 				try {
 					const response = await fetch(
-						`http://192.168.167.48:8000/auth/${userId}`,
+						`${import.meta.env.VITE_API_URL}/auth/${userId}`,
 						{
 							method: 'GET',
 							headers: { 'Content-Type': 'application/json' },
