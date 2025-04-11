@@ -89,7 +89,7 @@ function Events({}) {
 						/>
 					))
 				) : (
-					<p className='text-center text-gray-500'>Новостей нет</p>
+					<p className='text-center text-gray-500'>Мероприятий нет</p>
 				)}
 			</div>
 		</div>

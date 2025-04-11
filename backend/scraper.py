@@ -105,7 +105,7 @@ class Scraper():
         except Exception as e:
             print(f"❌ Исключение при отправке: {e}")
 
-    def scrap_all(self, start_id=304):
+    def scrap_all(self, start_id=308):
         id = start_id
         while True:
             print(f'Парсим новость #{id}...')

@@ -25,8 +25,8 @@ function CertificateCard({
 						<p className='col-span-1 md:col-span-1'>{Count}</p>
 					</div>
 					<div className='grid grid-cols-5'>
-						<div className='col-span-1 flex gap-2 opacity-50 items-center justify-start '>
-							<img src='icons/calendar.svg' alt='' className='h-5' />
+						<div className='col-span-1 flex gap-2 opacity-50 text-sm items-center justify-start '>
+							<img src='icons/calendar.svg' alt='' className='h-3' />
 							<p>{date}</p>
 						</div>
 						<p className='col-span-3 opacity-50 text-sm text-center font-light'>

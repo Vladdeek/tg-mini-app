@@ -5,6 +5,10 @@ import ScheduleCard from '../components/ScheduleCard'
 
 function Schedule() {
 	const [Data, setData] = useState([])
+	const userId = localStorage.getItem('user_id')
+
+	const [userData, setUserData] = useState(null)
+	const [groupData, setGroupData] = useState(null)
 
 	const Time = [
 		{ Time: '8:00-9:20' },
@@ -25,12 +29,60 @@ function Schedule() {
 		{ DayName: 'пт', DayNum: '11', schedule: [] },
 		{ DayName: 'сб', DayNum: '12', schedule: [] },
 		{ DayName: 'вс', DayNum: '13', schedule: [] },
+		{ DayName: 'пн', DayNum: '14', schedule: [] },
+		{ DayName: 'вт', DayNum: '15', schedule: [] },
+		{ DayName: 'ср', DayNum: '16', schedule: [] },
+		{ DayName: 'чт', DayNum: '17', schedule: [] },
 	])
 
 	useEffect(() => {
+		const checkUserExists = async () => {
+			const response = await fetch(
+				`http://192.168.167.48:8000/user/${userId}`,
+				{
+					method: 'GET',
+					headers: { 'Content-Type': 'application/json' },
+				}
+			)
+			if (!response.ok) {
+				throw new Error('Пользователь не найден')
+			}
+			const data = await response.json()
+			console.log('данные из API:', data)
+			setUserData(data)
+		}
+
+		checkUserExists()
+	}, [userId])
+
+	useEffect(() => {
+		const fetchGroupInfo = async () => {
+			if (userData && userData.user_group) {
+				const response = await fetch(
+					`http://192.168.167.48:8000/groupinfo/${userData.user_group}`,
+					{
+						method: 'GET',
+						headers: { 'Content-Type': 'application/json' },
+					}
+				)
+				if (!response.ok) {
+					throw new Error('Группа не найдена')
+				}
+				const data = await response.json()
+				console.log('данные из API:', data)
+				setGroupData(data)
+			}
+		}
+
+		fetchGroupInfo()
+	}, [userData])
+
+	useEffect(() => {
 		const fetchCertificates = async () => {
-			try {
-				const response = await fetch(`http://192.168.167.48:8000/schedule/`)
+			if (groupData && groupData.id) {
+				const response = await fetch(
+					`http://192.168.167.48:8000/schedule/${groupData.id}`
+				)
 				if (!response.ok) throw new Error('Ошибка при получении расписания')
 				const data = await response.json()
 				setData(data)
@@ -58,12 +110,10 @@ function Schedule() {
 				})
 
 				setDays(updatedDays)
-			} catch (error) {
-				console.error('Ошибка при загрузке данных:', error)
 			}
 		}
 		fetchCertificates()
-	}, [])
+	}, [groupData])
 
 	const todayIndex = new Date().getDay() === 0 ? 6 : new Date().getDay() - 1
 
@@ -100,18 +150,18 @@ function Schedule() {
 	}
 
 	return (
-		<div className='h-screen w-screen bg-[#820000] flex flex-col justify-end'>
+		<div className='h-screen w-screen flex flex-col justify-end bg-[#820000]'>
 			<button onClick={handleBack}>
 				<img
 					src='icons/arrow-prev-svgrepo-com.svg'
 					alt=''
-					className='h-15 fixed top-5 left-5 bg-[#C10F1A] p-3 rounded-[20px]'
+					className='h-15 fixed top-5 left-5 bg-[#ffffff33] p-3 rounded-xl'
 				/>
 			</button>
 			<p className='text-3xl font-bold text-white text-center mb-10'>
 				Апрель 7-13
 			</p>
-			<div className='w-full flex max-sm:gap-2 gap-0 justify-center mb-5'>
+			<div className='flex px-5 gap-5 mb-5 overflow-x-auto overscroll-x-auto'>
 				{days.map((day, index) => (
 					<Weekday
 						key={index}
@@ -122,7 +172,7 @@ function Schedule() {
 					/>
 				))}
 			</div>
-			<div className='w-full h-2/3 bg-[#efefef] overflow-y-auto rounded-t-[66px] p-4'>
+			<div className='w-full h-2/3 bg-[#efefef] overflow-y-auto rounded-t-3xl p-4'>
 				{days[activeIndex]?.schedule.length > 0 ? (
 					days[activeIndex].schedule.map(
 						({ subject, auditoria, time, teacher }, idx) => (

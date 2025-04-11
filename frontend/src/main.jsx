@@ -16,6 +16,7 @@ import OneNewsPage from './pages/OneNewsPage.jsx'
 import Logo from './pages/logo.jsx'
 import AllNews from './pages/AllNews.jsx'
 import AdminCertificate from './admin/AdminCertificate.jsx'
+import Error from './pages/Error.jsx'
 
 createRoot(document.getElementById('root')).render(
 	<>
@@ -34,6 +35,7 @@ createRoot(document.getElementById('root')).render(
 				<Route path='/news/:id' element={<OneNewsPage />} />
 				<Route path='/allnews/' element={<AllNews />} />
 				<Route path='/admincertificate/' element={<AdminCertificate />} />
+				<Route path='/505/' element={<Error />} />
 			</Routes>
 		</BrowserRouter>
 	</>

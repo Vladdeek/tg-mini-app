@@ -2,13 +2,12 @@ function Weekday({ DayName, DayNum, isActive, onClick }) {
 	return (
 		<div
 			onClick={onClick}
-			className={`flex flex-col w-auto text-white items-center justify-center px-4 py-2 rounded-2xl cursor-pointer transition-all`}
-			style={{
-				backgroundColor: isActive ? '#C10F1A' : '',
-			}}
+			className={` h-25 flex flex-col items-center justify-center rounded-xl cursor-pointer transition-all ${
+				isActive ? 'bg-white text-[#C10F1A]' : 'bg-[#ffffff33] text-white'
+			}`}
 		>
-			<p className='font-thin'>{DayName}</p>
-			<p className='font-semibold'>{DayNum}</p>
+			<p className='font-semibold text-3xl text-center w-20'>{DayNum}</p>
+			<p className='font-thin text-xl'>{DayName}</p>
 		</div>
 	)
 }

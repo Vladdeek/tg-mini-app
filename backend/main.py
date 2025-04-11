@@ -185,3 +185,18 @@ async def get_schedule(db: Session = Depends(get_db)):
         joinedload(Schedule.weekday)
     ).all()
     return schedules
+
+@app.get("/schedule/{group_id}", response_model=List[ScheduleSchema])
+async def get_schedule_by_group_number(group_id: str, db: Session = Depends(get_db)):
+    schedules = db.query(Schedule).options(
+        joinedload(Schedule.auditoria),
+        joinedload(Schedule.teacher),
+        joinedload(Schedule.subject),
+        joinedload(Schedule.group_info),
+        joinedload(Schedule.weekday)
+    ).filter(Schedule.group_id == group_id).all()
+
+    if not schedules:
+        raise HTTPException(status_code=404, detail=f"Schedule not found for group: {group_number}")
+
+    return schedules

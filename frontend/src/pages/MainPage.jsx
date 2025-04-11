@@ -78,7 +78,7 @@ function MainPage() {
 					ImagePath={'icons/book-check.svg'}
 					title={'Экзамены'}
 					HandleChapter={() => {
-						navigate('/exams')
+						navigate('/505/')
 					}}
 				/>
 				<ChapterCard

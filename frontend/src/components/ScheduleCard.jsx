@@ -7,7 +7,7 @@ function ScheduleCard({
 }) {
 	return (
 		<div
-			className='w-full h-40 bg-white rounded-[50px] flex flex-col gap-2 px-5 pb-6 pt-4 mb-4 transition-all'
+			className='w-full h-40 bg-white rounded-2xl flex flex-col gap-2 px-5 pb-6 pt-4 mb-4 transition-all '
 			style={{
 				boxShadow: isActiveLesson
 					? '0 4px 8px rgba(193, 15, 26, 0.31)'

@@ -79,7 +79,7 @@ function Login() {
 			id='form-container'
 			className='h-screen w-screen flex flex-col justify-center items-center text-center p-10'
 		>
-			<div className={`transition-all ${isFocused ? 'mb-85' : ''}`}>
+			<div className={`transition-all ${isFocused ? '' : ''}`}>
 				{step !== 1 ? (
 					<p className='text-4xl mb-15 text-center text-black z-10 relative'>
 						Привет, {fullName.split(' ')[1] || fullName}👋
